@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Registration</title>
+</head>
+<body>
+    <h2>Register for the Event</h2>
+    <form method="POST">
+        Name: <input type="text" name="name" required><br><br>
+        Email: <input type="email" name="email" required><br><br>
+        <input type="submit" value="Register">
+    </form>
+</body>
+</html>
+
+
+
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+@app.route("/", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        name = request.form["name"]
+        email = request.form["email"]
+        return f"Thank you {name}! Your email {email} has been registered."
+    return render_template("register.html")
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
+
+
+
+# Use an official Python image
+FROM python:3.9-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy app files
+COPY . /app
+
+# Install dependencies
+RUN pip install -r requirements.txt
+
+# Expose port
+EXPOSE 5000
+
+# Run the application
+CMD ["python", "app.py"]
+
+
+
+flask
+
+
+event-registration/
+├── app.py
+├── templates/
+│   └── register.html
+├── requirements.txt
+└── Dockerfile
+
+
+docker build -t flask-event-app .
+docker run -p 5000:5000 flask-event-app
